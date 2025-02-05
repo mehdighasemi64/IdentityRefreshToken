@@ -54,6 +54,7 @@ using IdentityRefreshToken.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Cryptography;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -94,7 +95,8 @@ builder.Services.AddAuthentication("Bearer")
             ValidAudience = "api1", // Match the audience in your token
             ValidateIssuer = true,
             ValidIssuer = "https://localhost:7059", // Match the issuer in your token
-            ValidateLifetime = true // Ensure token expiration is checked
+            ValidateLifetime = true, // Ensure token expiration is checked
+            ClockSkew = TimeSpan.Zero, // Optionally set this to zero to prevent any skew in expiration time            
         };
     });
 

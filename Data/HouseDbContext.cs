@@ -35,6 +35,8 @@ namespace IdentityRefreshToken.Data
         }
 
         public DbSet<House> Houses { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
+        public DbSet<User> Users { get; set; } // Add User table
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -44,6 +46,21 @@ namespace IdentityRefreshToken.Data
             }
 
             base.OnConfiguring(optionsBuilder);
+
+        }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);  // Call base method
+
+            modelBuilder.Entity<RefreshToken>(entity =>
+            {
+                entity.HasKey(r => r.Id); // Primary Key
+                entity.Property(r => r.Token)
+                    .IsRequired()
+                    .HasMaxLength(500); // Optional max length
+                entity.Property(r => r.ExpiryDate)
+                    .IsRequired();
+            });
         }
     }
 }
